@@ -1,0 +1,40 @@
+﻿@page "/lifecycleevents"
+@page "/lifecycleevents/{Number}"
+@inject NavigationManager navigationManager
+
+<h1>Component lifecycle events</h1>
+<p>This demonstrates the basic lifecycle events of a page</p>
+<p>It also shows that the same "component (page)" instance is reused if only the route value/parameters change</p>
+
+<div>
+    <button class="btn btn-sm btn-info" @onclick="@(e => events.Add(++counter, "OnClick"))">Do something</button>
+    &nbsp;
+    <button class="btn btn-sm btn-info" @onclick="@(e => { navigationManager.NavigateTo($"/lifecycleevents/{counter}"); })">Nav to route, value is: @(Number ?? "null")</button>
+    &nbsp;
+    <button class="btn btn-sm btn-info" @onclick="@(e => { navigationManager.NavigateTo($"/lifecycleevents"); })">Back to empty route, value is: @(Number ?? "null")</button>
+</div>
+<br /><br />
+<div>
+    <ul>
+        @foreach (var e in events)
+        {
+            <li @key="e.Key">#@e.Key.ToString("000"): @e.Value</li>
+        }
+    </ul>
+</div>
+
+@code {
+
+    [Parameter] public string Number { get; set; }
+
+    private int counter = 0;
+    private SortedList<int, string> events = new SortedList<int, string>();
+
+    protected override void OnInitialized() => events.Add(++counter, "OnInitialized");
+    protected override void OnParametersSet() => events.Add(++counter, "OnParametersSet");
+    protected override Task OnInitializedAsync() { events.Add(++counter, "OnInitializedAsync"); return Task.CompletedTask; }
+    protected override Task OnParametersSetAsync() { events.Add(++counter, "OnParametersSetAsync"); return Task.CompletedTask; }    
+    protected override void OnAfterRender(bool firstRender) => events.Add(++counter, $"OnAfterRender(firstRender: {firstRender})");
+    protected override Task OnAfterRenderAsync(bool firstRender) { events.Add(++counter, $"OnAfterRenderAsync(firstRender: {firstRender})"); return Task.CompletedTask; }
+
+}

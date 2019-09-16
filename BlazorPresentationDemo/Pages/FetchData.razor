@@ -1,46 +1,42 @@
 ﻿@page "/fetchdata"
 
-@using BlazorPresentationDemo.Data
+@using BlazorPresentationDemo.Services
 @inject WeatherForecastService ForecastService
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<div class="btn-group" role="group">
+    @foreach (var c in cities)
+    {
+        <button type="button" class="btn btn-info" @onclick="@(e => LoadForecast(c.city, c.countryCode))">@c.display</button>
+    }
+</div>
+
+<br /><br />
+<WeatherForecast Data="forecasts"></WeatherForecast>
 
 @code {
-    WeatherForecast[] forecasts;
+    WeatherForecastItem[] forecasts;
+
+    (string city, string countryCode, string display)[] cities = new[]
+    {
+        ("silkeborg", "dk", "Silkeborg"),
+        ("aarhus", "dk", "Aarhus"),
+        ("copenhagen", "dk", "København"),
+        ("lloyney", "gb", "Lloyney, GB"),
+        ("muscat", "om", "Muscat, OM")
+    };
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        await LoadForecast("silkeborg", "dk");
+    }
+
+    private async Task LoadForecast(string city, string countryCode)
+    {
+        forecasts = null;
+        forecasts = await ForecastService.GetForecastAsync(city, countryCode);
     }
 }

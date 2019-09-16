@@ -13,7 +13,7 @@
     &nbsp;
     <button class="btn btn-sm btn-info" @onclick="@(e => { navigationManager.NavigateTo($"/lifecycleevents"); })">Back to empty route, value is: @(Number ?? "null")</button>
 </div>
-<br /><br />
+<br />
 <div>
     <ul>
         @foreach (var e in events)
@@ -36,5 +36,4 @@
     protected override Task OnParametersSetAsync() { events.Add(++counter, "OnParametersSetAsync"); return Task.CompletedTask; }    
     protected override void OnAfterRender(bool firstRender) => events.Add(++counter, $"OnAfterRender(firstRender: {firstRender})");
     protected override Task OnAfterRenderAsync(bool firstRender) { events.Add(++counter, $"OnAfterRenderAsync(firstRender: {firstRender})"); return Task.CompletedTask; }
-
 }

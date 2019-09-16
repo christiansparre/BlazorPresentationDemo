@@ -1,7 +1,16 @@
 ﻿@page "/"
+@inject BlazorPresentationDemo.State.AppState appState
+
 
 <h1>Hello, world!</h1>
 
 <p>
     Welcome to this demo app
 </p>
+
+@if (!string.IsNullOrWhiteSpace(appState.GlobalMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        Oh! Would you look at that nice global message: <strong>@appState.GlobalMessage</strong>
+    </div>
+}

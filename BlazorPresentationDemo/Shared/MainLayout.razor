@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject State.AppState appState
+@implements IDisposable
 
 <div class="sidebar">
     <NavMenu />
@@ -6,10 +8,23 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+        @appState.GlobalMessage
     </div>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        appState.GlobalMessageChanged += AppState_GlobalMessageChanged;
+    }
+
+    public void AppState_GlobalMessageChanged() => StateHasChanged();
+
+    public void Dispose() => appState.GlobalMessageChanged -= AppState_GlobalMessageChanged;
+}

@@ -1,0 +1,48 @@
+﻿
+@if (Data != null)
+{
+    <table class="table">
+        @foreach (var day in Data.GroupBy(g => g.Time.Date))
+        {
+            <thead>
+                <tr>
+                    <th colspan="4">@day.Key.ToString("dddd") (@day.Key.ToShortDateString())</th>
+                </tr>
+                <tr>
+                    <th>Hour</th>
+                    <th>Temp. (&deg;C)</th>
+                    <th>Humidity</th>
+                    <th>Weather</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var forecast in day)
+                {
+                    <tr>
+                        <td>@forecast.Time.ToString("HH:mm")</td>
+                        <td>@forecast.Temperature.ToString("N0")</td>
+                        <td>@forecast.Humidity</td>
+                        <td>@forecast.Weather</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"></td>
+                </tr>
+            </tfoot>
+        }
+    </table>
+}
+else
+{
+    <div class="spinner-border text-success" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+
+@code {
+
+    [Parameter] public WeatherForecastItem[] Data { get; set; }
+
+}

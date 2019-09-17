@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BlazorPresentationDemo.Components
+namespace BlazorPresentationDemo.Shared.Models
 {
     public class WeatherForecastItem
     {

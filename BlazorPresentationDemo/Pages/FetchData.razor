@@ -1,7 +1,10 @@
 ﻿@page "/fetchdata"
 
-@using BlazorPresentationDemo.Services
-@inject WeatherForecastService ForecastService
+@using BlazorPresentationDemo.Shared.Services
+@using BlazorPresentationDemo.Shared.Models
+@inject WeatherForecastService forecastService
+@inject IConfiguration configuration
+
 
 <h1>Weather forecast</h1>
 
@@ -14,7 +17,8 @@
     }
 </div>
 
-<br /><br />
+<br />
+<br />
 <WeatherForecast Data="forecasts"></WeatherForecast>
 
 @code {
@@ -37,6 +41,6 @@
     private async Task LoadForecast(string city, string countryCode)
     {
         forecasts = null;
-        forecasts = await ForecastService.GetForecastAsync(city, countryCode);
+        forecasts = await forecastService.GetForecastAsync(city, countryCode, configuration["WeatherApiKey"]);
     }
 }

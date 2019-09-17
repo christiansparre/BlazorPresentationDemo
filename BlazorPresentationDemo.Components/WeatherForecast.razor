@@ -1,4 +1,4 @@
-﻿
+﻿@using BlazorPresentationDemo.Shared.Models
 @if (Data != null)
 {
     <table class="table">
@@ -44,5 +44,7 @@ else
 @code {
 
     [Parameter] public WeatherForecastItem[] Data { get; set; }
+
+
 
 }

@@ -1,0 +1,73 @@
+﻿@page "/fetchdata"
+
+@using BlazorPresentationDemo.Shared.Services
+@using BlazorPresentationDemo.Shared.Models
+@using BlazorPresentationDemo.Components
+@inject WeatherForecastService forecastService
+
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+<div class="form-inline">
+    <label class="mb-2 mr-2" for="message">API key</label>
+    <input type="password" style="width:450px;" class="form-control mb-2 mr-sm-2" id="message" @bind-value="apiKey" />
+    <button class="btn btn-primary mb-2" @onclick="@(async e => { if (!string.IsNullOrWhiteSpace(apiKey)) await LoadForecast("silkeborg", "dk"); })">Set API key</button>
+</div>
+
+<div class="btn-group" role="group">
+    @foreach (var c in cities)
+    {
+        <button type="button" class="btn btn-info" disabled="@(string.IsNullOrWhiteSpace(apiKey))" @onclick="@(e => LoadForecast(c.city, c.countryCode))">@c.display</button>
+    }
+</div>
+
+<br />
+<br />
+@if (apiKey != null)
+{
+    <WeatherForecast Data="forecasts"></WeatherForecast>
+}
+
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        Oh snap! "<strong>@errorMessage</strong>"
+    </div>
+}
+
+@code {
+    WeatherForecastItem[] forecasts;
+
+    private string apiKey;
+    string errorMessage;
+
+    (string city, string countryCode, string display)[] cities = new[]
+    {
+        ("silkeborg", "dk", "Silkeborg"),
+        ("aarhus", "dk", "Aarhus"),
+        ("copenhagen", "dk", "København"),
+        ("lloyney", "gb", "Lloyney, GB"),
+        ("muscat", "om", "Muscat, OM")
+    };
+
+    private async Task LoadForecast(string city, string countryCode)
+    {
+        errorMessage = null;
+
+        if (!string.IsNullOrWhiteSpace(apiKey))
+        {
+            forecasts = null;
+            try
+            {
+                forecasts = await forecastService.GetForecastAsync(city, countryCode, apiKey);
+            }
+            catch (Exception ex)
+            {
+                forecasts = new WeatherForecastItem[0];
+                errorMessage = ex.Message;
+            }
+        }
+    }
+}

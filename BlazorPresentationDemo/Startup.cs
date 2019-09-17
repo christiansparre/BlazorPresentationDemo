@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorPresentationDemo.Services;
 using BlazorPresentationDemo.State;
+using BlazorPresentationDemo.Shared.Services;
 
 namespace BlazorPresentationDemo
 {
@@ -27,14 +27,16 @@ namespace BlazorPresentationDemo
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
-            services.AddHttpClient();
+            
+            services
+                .AddHttpClient()
+                .AddHttpClient<WeatherForecastService>();
 
             // In Blazor Server services that should be per user should be Scoped
 
             services.AddScoped<AppState>();
         }
-                
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

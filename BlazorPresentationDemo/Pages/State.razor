@@ -10,7 +10,7 @@
 <h4>Change the global message</h4>
 <p>Keep an eye on the top right corner of the app</p>
 <div class="form-inline">
-    <label class="sr-only" for="message">Message</label>
+    <label class="mb-2 mr-2" for="message">Message</label>
     <input type="text" style="width:450px;" class="form-control mb-2 mr-sm-2" id="message" @bind-value="editableMessage" @onkeyup="GlobalMessageInput_OnKeyUp" placeholder="Please add your message here" />
     <button class="btn btn-primary mb-2" @onclick="@(e => appState.GlobalMessage = editableMessage)">Change message</button>
 </div>

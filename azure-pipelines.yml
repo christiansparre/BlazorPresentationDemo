@@ -21,10 +21,10 @@ steps:
 - script: dotnet build -c Release
   displayName: 'Build solution'
 
-- script: dotnet publish BlazorPresentationDemo/BlazorPresentationDemo.csproj -c Release -r win10-x86 --self-contained true 
+- script: dotnet publish BlazorPresentationDemo/BlazorPresentationDemo.csproj -c Release -r win10-x86 --self-contained true --no-build
   displayName: 'Publish Blazor Server site'
 
-- script: dotnet publish BlazorPresentationDemo.WebAssembly/BlazorPresentationDemo.WebAssembly.csproj -c Release
+- script: dotnet publish BlazorPresentationDemo.WebAssembly/BlazorPresentationDemo.WebAssembly.csproj -c Release --no-build
   displayName: 'Publish Blazor WebAssembly site'
 
 - task: ArchiveFiles@2
@@ -32,7 +32,14 @@ steps:
   inputs:
     rootFolderOrFile: 'BlazorPresentationDemo/bin/Release/netcoreapp3.0/win10-x86/publish'
     includeRootFolder: false
-    archiveFile: '$(Build.ArtifactStagingDirectory)/BlazorPresentationDemo-$(Build.BuildNumber).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/blazorserver/BlazorPresentationDemo-$(Build.BuildNumber).zip'
+
+- task: ArchiveFiles@2
+  displayName: 'Create deployment package for Blazor WASM site'
+  inputs:
+    rootFolderOrFile: 'BlazorPresentationDemo.WebAssembly/bin/Release/netstandard2.0/publish/BlazorPresentationDemo.WebAssembly/dist'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/blazorserver/BlazorPresentationDemo-WebAssembly-$(Build.BuildNumber).zip'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'

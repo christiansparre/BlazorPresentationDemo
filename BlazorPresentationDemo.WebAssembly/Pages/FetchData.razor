@@ -5,13 +5,12 @@
 @using BlazorPresentationDemo.Components
 @inject WeatherForecastService forecastService
 
-
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
 <div class="form-inline">
-    <label class="mb-2 mr-2" for="message">API key</label>
+    <label class="mb-2 mr-2" for="message">OpenWeather API key</label>
     <input type="password" style="width:450px;" class="form-control mb-2 mr-sm-2" id="message" @bind-value="apiKey" />
     <button class="btn btn-primary mb-2" @onclick="@(async e => { if (!string.IsNullOrWhiteSpace(apiKey)) await LoadForecast("silkeborg", "dk"); })">Set API key</button>
 </div>

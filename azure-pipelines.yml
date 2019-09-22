@@ -1,0 +1,40 @@
+trigger:
+- master
+- feature/*
+
+variables:
+  version: "1.0.0"
+  
+name: $(version)-$(Date:yyyyMMdd)$(Rev:.rrr)-$(Build.SourceBranchName)
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Installing .NET Core 3 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.100-rc1-014190'
+    includePreviewVersions: true
+
+- script: dotnet build -c Release
+  displayName: 'Build solution'
+
+- script: dotnet publish -c Release .\BlazorPresentationDemo\BlazorPresentationDemo.csproj
+  displayName: 'Publish Blazor Server site'
+
+- script: dotnet publish -c Release .\BlazorPresentationDemo.WebAssembly\BlazorPresentationDemo.WebAssembly.csproj
+  displayName: 'Publish Blazor WebAssembly site'
+
+- task: ArchiveFiles@2
+  displayName: 'Create deployment package for Blazor Server site'
+  rootFolderOrFile: '.\BlazorPresentationDemo\bin\Release\netcoreapp3.0\publish'
+  includeRootFolder: false
+  archiveFile: '$(Build.ArtifactStagingDirectory)/BlazorPresentationDemo-$(Build.BuildNumber).zip'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'drop' 

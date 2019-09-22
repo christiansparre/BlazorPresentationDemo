@@ -21,10 +21,10 @@ steps:
 - script: dotnet build -c Release
   displayName: 'Build solution'
 
-- script: dotnet publish BlazorPresentationDemo/BlazorPresentationDemo.csproj -c Release -r win10-x86 --self-contained true --no-build
+- script: dotnet publish BlazorPresentationDemo/BlazorPresentationDemo.csproj -c Release -r win10-x86 --self-contained true
   displayName: 'Publish Blazor Server site'
 
-- script: dotnet publish BlazorPresentationDemo.WebAssembly/BlazorPresentationDemo.WebAssembly.csproj -c Release --no-build
+- script: dotnet publish BlazorPresentationDemo.WebAssembly/BlazorPresentationDemo.WebAssembly.csproj -c Release
   displayName: 'Publish Blazor WebAssembly site'
 
 - task: ArchiveFiles@2

@@ -21,8 +21,16 @@
 <br />
 <WeatherForecast Data="forecasts"></WeatherForecast>
 
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        Oh snap! "<strong>@errorMessage</strong>"
+    </div>
+}
+
 @code {
     WeatherForecastItem[] forecasts;
+    string errorMessage;
 
     (string city, string countryCode, string display)[] cities = new[]
     {
@@ -40,7 +48,15 @@
 
     private async Task LoadForecast(string city, string countryCode)
     {
+        errorMessage = null;
         forecasts = null;
-        forecasts = await forecastService.GetForecastAsync(city, countryCode, configuration["WeatherApiKey"]);
+        try
+        {
+            forecasts = await forecastService.GetForecastAsync(city, countryCode, configuration["WeatherApiKey"]);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
     }
 }

@@ -21,16 +21,16 @@ steps:
 - script: dotnet build -c Release
   displayName: 'Build solution'
 
-- script: dotnet publish -c Release -r win10-x86 --self-contained true .\BlazorPresentationDemo\BlazorPresentationDemo.csproj
+- script: dotnet publish BlazorPresentationDemo/BlazorPresentationDemo.csproj -c Release -r win10-x86 --self-contained true 
   displayName: 'Publish Blazor Server site'
 
-- script: dotnet publish -c Release .\BlazorPresentationDemo.WebAssembly\BlazorPresentationDemo.WebAssembly.csproj
+- script: dotnet publish BlazorPresentationDemo.WebAssembly/BlazorPresentationDemo.WebAssembly.csproj -c Release
   displayName: 'Publish Blazor WebAssembly site'
 
 - task: ArchiveFiles@2
   displayName: 'Create deployment package for Blazor Server site'
   inputs:
-    rootFolderOrFile: '.\BlazorPresentationDemo\bin\Release\netcoreapp3.0\win10-x86\publish'
+    rootFolderOrFile: 'BlazorPresentationDemo/bin/Release/netcoreapp3.0/win10-x86/publish'
     includeRootFolder: false
     archiveFile: '$(Build.ArtifactStagingDirectory)/BlazorPresentationDemo-$(Build.BuildNumber).zip'
 
